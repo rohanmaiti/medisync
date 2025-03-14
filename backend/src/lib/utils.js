@@ -11,4 +11,4 @@ res.cookie("jwt", token, {
 return token;
 }
 
-module.exports = generateToken;
+module.exports = generateToken; 

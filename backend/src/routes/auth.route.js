@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const {signup, login, logout, updateProfile, checkAuth} = require("../controllers/auth.controller.js");
-const protectedRoute = require("../middlewire/auth.middlewire.js");
+const protectedRoute = require("../middlewares/auth.middleware.js");
 
 router.post("/signup", signup);
 router.post("/login", login);
