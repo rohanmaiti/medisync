@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const patientHistorySchema = new mongoose.Schema({
-  patient: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Patient',  // Reference to Patient schema
+    ref: 'User',  // Reference to User schema
     required: true
   },
   slot: {
@@ -27,7 +27,9 @@ const patientHistorySchema = new mongoose.Schema({
     type: Boolean,
     default: false   // true = confidential
   }
-});
+},
+{timestamps:true}
+);
 
 const PatientHistory= mongoose.model('PatientHistory', patientHistorySchema);
 module.exports=PatientHistory; 

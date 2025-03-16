@@ -8,7 +8,7 @@ const slotSchema = new mongoose.Schema({
   },
   patient: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Patient',    // Reference to Patient Schema
+    ref: 'User',    // Reference to User Schema
     required: true
   },
   department: {
@@ -18,7 +18,7 @@ const slotSchema = new mongoose.Schema({
   },
   slot_time: {
     type: String,
-    required: true
+    // required: true
   }
 });
 
