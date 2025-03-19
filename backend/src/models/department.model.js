@@ -1,7 +1,7 @@
     const mongoose = require('mongoose');
 
     const departmentSchema = new mongoose.Schema({
-        hospital:{
+    hospital:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Hospital"
     },   

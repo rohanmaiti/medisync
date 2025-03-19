@@ -1,16 +1,18 @@
 import './App.css'
-import Navbar from './components/Navbar'
-import LandingPage from './pages/LandingPage'
-import { Routes, Route } from 'react-router-dom'
+import DoctorSlotView from './DoctorSlotView'
+// import BookOPDPage from './BookOPDPage'
+// import LandingPage from './pages/LandingPage'
+// import { Routes, Route } from 'react-router-dom'
 function App() {
 
   return (
     <div>
-      <Routes>
+      {/* <Routes>
        <Route path='/' element={<LandingPage/>} />  
       </Routes>
-      <h1 className='bg-amber-300' >Hii there!!</h1>
-
+      <h1 className='bg-amber-300' >Hii there!!</h1> */}
+      {/* <BookOPDPage/> */}
+      <DoctorSlotView/>
     </div>
   )
 }
