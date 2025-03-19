@@ -20,13 +20,16 @@ connectDB().then(()=>console.log("Connected to DB"))
 const authRoutes = require("./routes/auth.route.js");
 const User = require("./models/user.model.js");
 
+const slotRoutes = require("./routes/slot.route.js")
+
 app.use(cors({
     origin:"http://localhost:5173",
     credentials:true,
 }));
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 
 
 app.use("/",userRoutes);
+app.use('/api/slots', slotRoutes);
