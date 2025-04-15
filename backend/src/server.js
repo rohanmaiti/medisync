@@ -29,4 +29,4 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 
 
-app.use("/",userRoutes);
+app.use("/api",userRoutes);
