@@ -7,6 +7,7 @@ export const LandingPage = () => {
         <div className="navsection">
             <Navbar/>
         </div>
+        
     </div>
   )
 }
