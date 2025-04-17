@@ -70,6 +70,7 @@ button:focus-visible {
 
 
 @import "tailwindcss";
+@import '@fontsource/inter';
 body{
   background-color: rgb(48, 48, 62);
 }
