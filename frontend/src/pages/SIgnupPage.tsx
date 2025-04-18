@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export const SignupSection = () => {
+export const SignupPage = () => {
   const navigate = useNavigate();
   const usernameRef = useRef<HTMLInputElement | null>(null);
   const userEmailRef = useRef<HTMLInputElement | null>(null);

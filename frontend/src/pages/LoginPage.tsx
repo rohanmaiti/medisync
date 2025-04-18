@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-export const LoginSection = () => {
+export const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [typeOfUser, setTypeOfUser] = useState<string>("user");
@@ -22,9 +22,7 @@ export const LoginSection = () => {
         <h1 className="text-4xl text-left font-extrabold leading-13 max-w-md">
           Welcome to MediSync <br /> Login to continue
         </h1>
-		<h2 className="text-green-600" >
-			THIS IS <span className="text-orange-600" >{typeOfUser.toUpperCase()}</span> LOGIN PAGE
-		</h2>
+		
         {typeOfUser == "user" ? (
           <>
             <h2 className="">
