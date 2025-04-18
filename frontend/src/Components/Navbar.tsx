@@ -22,8 +22,13 @@ export const Navbar = () => {
           case "receptionist":
             navigate("/login",{state:{userType:"receptionist"}}) 
             break;
+          case "hospital admin":
+            navigate("/login",{state:{userType:"hospital admin"}}) 
+            break;
           default:
             alert("unknown type")
+            navigate("/");
+            break;
        }
     } 
   return (
@@ -108,7 +113,7 @@ export const Navbar = () => {
     <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("doctor")}} >Doctor</MenuItem>
     <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("inventory manager")}} >Inventory Manager</MenuItem>
     <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("receptionist")}} >Reception</MenuItem>
-    <MenuItem >Hospital Admin</MenuItem>
+    <MenuItem sx={{borderBottom:"none"}} onClick={(e)=>{handleLoginUser("hospital admin")}} >Hospital Admin</MenuItem>
     </Menu>
     </Dropdown>
     </div>

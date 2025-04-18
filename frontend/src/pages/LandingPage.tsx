@@ -1,4 +1,3 @@
-import React from 'react'
 import { Navbar } from '../components/Navbar'
 import { HomeSection  } from './sections/HomeSection'
 import { ServiceSection } from './sections/ServiceSection'
