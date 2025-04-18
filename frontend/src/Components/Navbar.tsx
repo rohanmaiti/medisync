@@ -4,8 +4,28 @@ import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import Dropdown from '@mui/joy/Dropdown';
+import { useNavigate } from 'react-router-dom';
 import React from 'react'
 export const Navbar = () => {
+    const navigate = useNavigate();
+    const handleLoginUser = (typeOfUser:string)=>{
+       switch (typeOfUser){
+        case "user":
+            navigate("/login",{state:{userType:"user"}})
+            break;
+          case "doctor":
+            navigate("/login",{state:{userType:"doctor"}})
+            break;
+          case "inventory manager":
+            navigate("/login",{state:{userType:"inventory manager"}})
+            break;
+          case "receptionist":
+            navigate("/login",{state:{userType:"receptionist"}}) 
+            break;
+          default:
+            alert("unknown type")
+       }
+    } 
   return (
     <>
     
@@ -84,10 +104,10 @@ export const Navbar = () => {
     <Menu
      placement="bottom-end" // 👈 aligns the dropdown to the right
     >
-    <MenuItem sx={{borderBottom:"1px solid #424242"}} >User</MenuItem>
-    <MenuItem sx={{borderBottom:"1px solid #424242"}} >Doctor</MenuItem>
-    <MenuItem sx={{borderBottom:"1px solid #424242"}} >Inventory Manager</MenuItem>
-    <MenuItem sx={{borderBottom:"1px solid #424242"}} >Reception</MenuItem>
+    <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("user")}} >User</MenuItem>
+    <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("doctor")}} >Doctor</MenuItem>
+    <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("inventory manager")}} >Inventory Manager</MenuItem>
+    <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("receptionist")}} >Reception</MenuItem>
     <MenuItem >Hospital Admin</MenuItem>
     </Menu>
     </Dropdown>
