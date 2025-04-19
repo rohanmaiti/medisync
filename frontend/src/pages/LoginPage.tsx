@@ -69,9 +69,9 @@ export const LoginPage = () => {
                   required
                 />
                 <div className="flex justify-end text-xs dark:text-gray-400">
-                  <a rel="noopener noreferrer" href="#">
+                  <Link rel="noopener noreferrer" to="/forgotpassword">
                     Forgot Password?
-                  </a>
+                  </Link>
                 </div>
               </div>
               <button className="block w-full p-3 text-center rounded-sm dark:text-gray-50 dark:bg-violet-600 hover:cursor-pointer ">
