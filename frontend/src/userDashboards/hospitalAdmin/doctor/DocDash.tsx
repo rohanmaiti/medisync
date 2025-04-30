@@ -57,6 +57,8 @@ const DocDash: React.FC = () => {
   const [showMedicineDropdown, setShowMedicineDropdown] =
     useState<boolean>(false);
 
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+
   // Generate time slots from 10 AM to 3 PM in 15-minute intervals
   const generateTimeSlots = () => {
     const slots = [];
@@ -120,6 +122,10 @@ const DocDash: React.FC = () => {
     console.log("Patient marked as visited");
     alert("Patient marked as visited successfully!");
   };
+
+  const filteredOptions = medicineOptions.filter((med) =>
+    med.name.toLowerCase().includes(searchMedicine.toLowerCase())
+  );
 
   return (
     <div className="w-full bg-gray-900 text-gray-200">
@@ -193,7 +199,7 @@ const DocDash: React.FC = () => {
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
             />
           </div>
-          <div className="mb-4  pb-3 w-full flex flex-col h-full">
+          <div className="mb-4 hidden sm:flex pb-3 w-full  flex-col h-full">
             <h3 className="text-gray-300 mb-2 flex items-center">
               <Clock size={16} className="mr-2 text-blue-400" />
               Time Slots
@@ -221,7 +227,7 @@ const DocDash: React.FC = () => {
             <Pill size={16} className="mr-2 text-blue-400" />
             Prescribed Medicines
           </h3>
-          <div className="bg-gray-700 rounded-lg p-2 border border-gray-600">
+          <div className="bg-gray-700 rounded-lg p-2 border border-gray-600 max-h-[560px] overflow-y-scroll">
             {selectedMedicines.length > 0 ? (
               <ul className="space-y-2">
                 {selectedMedicines.map((medicine) => (
@@ -278,7 +284,7 @@ const DocDash: React.FC = () => {
           </div>
 
           {/* Prescription Area */}
-          <div className="bg-green-800/80 rounded-lg border border-gray-700 p-4 min-h-[510px]">
+          <div className=" rounded-lg border border-gray-700 p-4 min-h-[510px]">
             {/* Medicine Search */}
             <div className="mb-4 relative">
               <label className="block text-gray-300 mb-2">
@@ -292,8 +298,36 @@ const DocDash: React.FC = () => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setSearchMedicine(e.target.value);
                       setShowMedicineDropdown(true);
+                      setSelectedIndex(-1);
                     }}
                     onFocus={() => setShowMedicineDropdown(true)}
+                    onKeyDown={(e) => {
+                      const target = e.target as HTMLInputElement;
+                      const filteredOptions = medicineOptions.filter((med) =>
+                        med.name
+                          .toLowerCase()
+                          .includes(searchMedicine.toLowerCase())
+                      );
+
+                      if (e.key === "ArrowDown") {
+                        e.preventDefault();
+                        setSelectedIndex((prev) =>
+                          prev < filteredOptions.length - 1 ? prev + 1 : 0
+                        );
+                      } else if (e.key === "ArrowUp") {
+                        e.preventDefault();
+                        setSelectedIndex((prev) =>
+                          prev > 0 ? prev - 1 : filteredOptions.length - 1
+                        );
+                      } else if (e.key === "Enter") {
+                        e.preventDefault();
+                        if(selectedIndex >=0 )
+                        handleMedicineSelect(filteredOptions[selectedIndex]);
+                        else
+                        handleAddMedicine();
+                        setShowMedicineDropdown(false);
+                      }
+                    }}
                     placeholder="Search medicine name"
                     className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
                   />
@@ -305,21 +339,19 @@ const DocDash: React.FC = () => {
                   {/* Dropdown for medicine selection */}
                   {showMedicineDropdown && searchMedicine && (
                     <div className="absolute z-10 w-full mt-1 bg-gray-700 border border-gray-600 rounded-lg shadow-lg max-h-40 overflow-y-auto">
-                      {medicineOptions
-                        .filter((med) =>
-                          med.name
-                            .toLowerCase()
-                            .includes(searchMedicine.toLowerCase())
-                        )
-                        .map((medicine) => (
-                          <div
-                            key={medicine.id}
-                            className="p-2 hover:bg-gray-600 cursor-pointer"
-                            onClick={() => handleMedicineSelect(medicine)}
-                          >
-                            {medicine.name}
-                          </div>
-                        ))}
+                      {filteredOptions.map((medicine, index) => (
+                        <div
+                          key={medicine.id}
+                          className={`p-2 cursor-pointer ${
+                            selectedIndex === index
+                              ? "bg-blue-600 text-white"
+                              : "hover:bg-gray-600"
+                          }`}
+                          onClick={() => handleMedicineSelect(medicine)}
+                        >
+                          {medicine.name}
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
