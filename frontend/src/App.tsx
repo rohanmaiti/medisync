@@ -10,7 +10,7 @@ import { useAuthStore } from './store/useAuthStore'
 import { useEffect } from 'react'
 import HospitalAdminDashboard from './userDashboards/hospitalAdmin/hospitalAdmin/HospitalAdminDashboard'
 import DoctorDashboard from './userDashboards/hospitalAdmin/doctor/doctorDashboard'
-import DocDash from './userDashboards/hospitalAdmin/doctor/DocDash'
+
 
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
        <Route path="/registration-form" element={<HospitalRegistrationForm/>}/>   
        <Route path="/book-opd-form" element={<BookOpdPage/>}/>   
        {/* <Route path="/hospitaladmin/dashboard" element={<HospitalAdminDashboard/>}/>    */}
-       <Route path="/doctor/dashboard" element={<DocDash/>}/>   
+       <Route path="/doctor/dashboard" element={<DoctorDashboard/>}/>   
       </Routes>
       
     </div>
