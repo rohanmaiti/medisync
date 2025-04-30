@@ -246,6 +246,7 @@ const DocDash: React.FC = () => {
                       className="text-red-400 hover:text-red-300"
                     >
                       <X size={16} />
+                      <p className="hidden" >hidden</p>
                     </button>
                   </li>
                 ))}
@@ -367,6 +368,7 @@ const DocDash: React.FC = () => {
                   className="p-2 bg-gray-700 border border-gray-600 rounded-l-lg hover:bg-gray-600"
                 >
                   <MinusCircle size={20} />
+                  <p className="hidden" >hidden</p>
                 </button>
                 <div className="px-4 py-2 bg-gray-700 border-y border-gray-600 text-center">
                   {quantity}
@@ -376,6 +378,7 @@ const DocDash: React.FC = () => {
                   className="p-2 bg-gray-700 border border-gray-600 rounded-r-lg hover:bg-gray-600"
                 >
                   <PlusCircle size={20} />
+                  <p className="hidden" >hidden</p>
                 </button>
 
                 <button
