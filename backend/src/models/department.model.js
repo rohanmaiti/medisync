@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+import mongoose from "mongoose";
     const departmentSchema = new mongoose.Schema({
     hospital:{
         type:mongoose.Schema.Types.ObjectId,
@@ -17,4 +16,4 @@ const mongoose = require('mongoose');
 });
 
 const Department = mongoose.model('Department', departmentSchema);
-module.exports=Department;
+export default Department;

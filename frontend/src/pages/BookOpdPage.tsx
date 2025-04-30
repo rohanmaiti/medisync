@@ -13,6 +13,7 @@ interface Department {
   name: string;
 }
 
+
 export const BookOpdPage = () => {
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -32,6 +33,7 @@ export const BookOpdPage = () => {
 
   useEffect(() => {
     fetchHospitals();
+
   }, []);
 
   const fetchHospitals = async () => {
@@ -46,11 +48,11 @@ export const BookOpdPage = () => {
   };
 
   const fetchDepartments = async (hospitalId: string) => {
+    console.log("aura")
     try {
-      const res = await axiosInstance.get(
-        `/departments?hospitalId=${hospitalId}`
-      );
+      const res = await axiosInstance.get(`/hospital/departments/${hospitalId}`);
       setDepartments(res.data);
+      console.log("dj")
     } catch (error) {
       console.error("Error fetching departments:", error);
       setDepartments([]);
@@ -63,6 +65,7 @@ export const BookOpdPage = () => {
       date: selectedDate,
       time: selectedTime,
     };
+    console.log(payload)
 
     try {
       await axiosInstance.post("/opd-booking", payload);
