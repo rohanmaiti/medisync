@@ -67,32 +67,37 @@ button:focus-visible {
   }
 } */
 
-
-
 @import "tailwindcss";
-@import '@fontsource/inter';
 body{
-  background-color: rgb(48, 48, 62);
+  @apply bg-gray-900 text-white;
 }
 
-/* Scrollbar width */
-::-webkit-scrollbar {
-  width: 8px;
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1f2937;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #374151;
+    border-radius: 10px;
+  }
 }
 
-/* Scrollbar track */
-::-webkit-scrollbar-track {
-  background: #1e1e2e; /* Dark background */
-  border-radius: 10px;
+
+@keyframes floating {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
-/* Scrollbar thumb */
-::-webkit-scrollbar-thumb {
-  background: #484854; /* Gradient effect */
-  border-radius: 10px;
-}
-
-/* Scrollbar thumb on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #484854;
+.animate-floating {
+  animation: floating 3s ease-in-out infinite;
 }

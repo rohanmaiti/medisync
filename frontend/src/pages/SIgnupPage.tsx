@@ -1,5 +1,7 @@
 import React, { useRef } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
 
 export const SignupPage = () => {
   const navigate = useNavigate();
@@ -7,12 +9,25 @@ export const SignupPage = () => {
   const userEmailRef = useRef<HTMLInputElement | null>(null);
   const userPasswordRef = useRef<HTMLInputElement | null>(null);
   const confirmPasswordRef = useRef<HTMLInputElement | null>(null);
+  const {signup } = useAuthStore();
   const handleSignupSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
-    alert(usernameRef.current?.value);
+    console.log("Signup form");
+    const username = usernameRef.current?.value;
+    const userEmail = userEmailRef.current?.value;
+    const userPassword = userPasswordRef.current?.value;
+    const confirmPassword = confirmPasswordRef.current?.value;
+    if(userPassword != confirmPassword){
+      return toast.error("Password and confirm password do not matched");
+    }
+    else{
+      signup({name:username, email:userEmail, password:userPassword}, navigate);
+    }
+
   }
   return (
     <div className="min-h-screen flex flex-col md:flex-row justify-center items-center gap-6 p-6 md:flex-row" >
+      <Toaster position="top-right"/>
       <div className=" p-4  leading-13" >
         <h1 className="text-4xl text-left font-extrabold leading-13 max-w-md" >Enter the details to register...</h1>
         <h2>Already have account? <Link className='text-green-600' to="/login">Login</Link> </h2>
@@ -79,7 +94,7 @@ export const SignupPage = () => {
               className="w-full px-4 py-3 rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800 focus:dark:border-violet-600"
             />
           </div>
-          <button className="block w-full p-3 text-center rounded-sm dark:text-gray-50 dark:bg-violet-600 hover:cursor-pointer ">
+          <button type="submit" className="block w-full p-3 text-center rounded-sm dark:text-gray-50 dark:bg-violet-600 hover:cursor-pointer ">
             Sign up
           </button>
         </form>

@@ -1,18 +1,16 @@
-const router = require("express").Router();
-const {signup, login, logout, updateProfile, checkAuth} = require("../controllers/auth.controller.js");
-const protectedRoute = require("../middlewares/auth.middleware.js");
-const slotController = require('../controllers/user.controller.js');
+import express from 'express';
+import { signup, login, logout, updateProfile, checkAuth, sendPasswordResetEmail } from '../controllers/auth.controller.js';
+import protectedRoute from '../middlewire/auth.middlewire.js';
 
-router.post("/signup", signup);
-router.post("/login", login);
-router.post("/logout", logout);
-router.put("/update-profile",protectedRoute, updateProfile);
-router.get("/check",protectedRoute,checkAuth);
+const router = express.Router();
 
+router.post('/signup', signup);
+router.post('/login', login);
+router.post('/logout', logout);
+router.put('/update-profile', updateProfile);
 
-router.post('/book', slotController.bookSlot);
-router.get('/hospitals', slotController.getHospitals);
-router.get('/departments/:hospitalId', slotController.getDepartmentsByHospital);
+router.post('/forgot-password', sendPasswordResetEmail);
 
+router.get('/check',protectedRoute, checkAuth);
 
-module.exports = router;
+export default router;

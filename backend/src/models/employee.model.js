@@ -1,33 +1,36 @@
-const mongoose = require('mongoose');
-
+import mongoose from "mongoose";
 const employeeSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    lowercase: true,
+    trim: true,
   },
   phone_number: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+  },
+  address: {
+    type: String,
+    required: true,
   },
   type: {
     type: String,
-    enum: ['doctor', 'enventory_manager', 'hospital_admin', 'receptionist'],
-    required: true
+    enum: ["doctor", "inventory_manager", "hospital_admin", "receptionist"],
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
-  address:{
-    type:String,
-    require:true
-  }
-});
+}, { timestamps: true });
 
-const Employee = mongoose.model('Employee', employeeSchema);
-module.exports = Employee;
+const Employee = mongoose.model("Employee", employeeSchema);
+export default Employee;

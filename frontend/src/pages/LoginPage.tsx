@@ -1,16 +1,29 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+import { Toaster } from "react-hot-toast";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [typeOfUser, setTypeOfUser] = useState<string>("user");
-
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwrodRef = useRef<HTMLInputElement | null>(null);
-  const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const {login, isLoggingIng } = useAuthStore();
+  
+  const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert(emailRef.current?.value + " " + passwrodRef.current?.value);
+    // alert(emailRef.current?.value + " " + passwrodRef.current?.value);
+    const data = {
+      email: emailRef.current?.value,
+      password: passwrodRef.current?.value,
+      userType: typeOfUser,
+    }
+    try {
+      login(data, navigate);
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     const userType = location.state?.userType;
@@ -18,6 +31,7 @@ export const LoginPage = () => {
   }, []);
   return (
     <div className="min-h-screen flex flex-col md:flex-row justify-center items-center gap-6 p-6 md:flex-row">
+      <Toaster  />
       <div className=" p-4  leading-13">
         <h1 className="text-4xl text-left font-extrabold leading-13 max-w-md">
           Welcome to MediSync <br /> Login to continue
@@ -75,7 +89,7 @@ export const LoginPage = () => {
                 </div>
               </div>
               <button className="block w-full p-3 text-center rounded-sm dark:text-gray-50 dark:bg-violet-600 hover:cursor-pointer ">
-                Log in
+              {isLoggingIng ? "Logging in..." : "Login"}
               </button>
             </form>
             {typeOfUser == "user" ? (
@@ -87,7 +101,7 @@ export const LoginPage = () => {
                     to="/signup"
                     className="underline dark:text-gray-400 hover:cursor-pointer"
                   >
-                    Sign up
+                    Sign up 
                   </Link>
                 </p>
               </>

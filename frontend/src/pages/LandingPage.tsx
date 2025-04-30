@@ -1,9 +1,13 @@
+import { useEffect } from 'react'
 import { Navbar } from '../components/Navbar'
-import { HomeSection  } from './sections/HomeSection'
+import { AboutSection } from './sections/AboutPage'
+import { HomeSection } from './sections/HomeSection'
 import { ServiceSection } from './sections/ServiceSection'
-import { AboutSection } from './sections/AboutSection'
+import { useAuthStore } from '../store/useAuthStore'
+
 
 export const LandingPage = () => {
+  // const {authUser, isCheckingAuth, checkAuth} = useAuthStore();
   return (
     <div className='h-screen overflow-y-auto scroll-smooth' >
         <div className="fixed w-full ">

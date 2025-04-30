@@ -1,53 +1,53 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const hospitalSchema = new mongoose.Schema({
   hospital_applicant_name: {
     type: String,
-    required: true
+    required: true,
   },
   hospital_name: {
     type: String,
-    required: true
+    required: true,
   },
   identity_type: {
     type: String,
-    required: true
+    required: true,
   },
   identity_card: {
-    type: [String], // array of image URLs or file paths
-    default: []
+    type: [String], // Array of URLs or file names
+    default: null,
   },
   hospital_contact_number: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   hospital_email: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   hospital_pincode: {
     type: String,
-    required: true
+    required: true,
   },
   hospital_address: {
     type: String,
-    required: true
+    required: true,
   },
-  hospital_photos: {
-    type: [String], // array of image URLs or file paths
-    default: []
+  hospital_photoes: {
+    type: [String], // Array of image URLs or file names
+    default: null,
   },
   approve_status: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isRejected: {
     type: Boolean,
-    default: false
-  }
-});
+    default: false,
+  },
+}, { timestamps: true });
 
-const Hospital= mongoose.model('Hospital', hospitalSchema);
-module.exports =Hospital;
+const Hospital = mongoose.model("hospitals", hospitalSchema);
+export default Hospital;

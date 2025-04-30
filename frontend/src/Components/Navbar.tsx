@@ -1,129 +1,172 @@
-import Input from '@mui/joy/Input';
-import Link from '@mui/joy/Link';
-import Menu from '@mui/joy/Menu';
-import MenuButton from '@mui/joy/MenuButton';
-import MenuItem from '@mui/joy/MenuItem';
-import Dropdown from '@mui/joy/Dropdown';
-import { useNavigate } from 'react-router-dom';
-import React from 'react'
+import {
+  Input,
+  Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  Dropdown,
+  IconButton,
+  Avatar,
+  Sheet
+} from "@mui/joy";
+import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+
 export const Navbar = () => {
-    const navigate = useNavigate();
-    const handleLoginUser = (typeOfUser:string)=>{
-       switch (typeOfUser){
-        case "user":
-            navigate("/login",{state:{userType:"user"}})
-            break;
-          case "doctor":
-            navigate("/login",{state:{userType:"doctor"}})
-            break;
-          case "inventory manager":
-            navigate("/login",{state:{userType:"inventory manager"}})
-            break;
-          case "receptionist":
-            navigate("/login",{state:{userType:"receptionist"}}) 
-            break;
-          case "hospital admin":
-            navigate("/login",{state:{userType:"hospital admin"}}) 
-            break;
-          default:
-            alert("unknown type")
-            navigate("/");
-            break;
-       }
-    } 
+  const { authUser, userType, isCheckingAuth, checkAuth } = useAuthStore();
+  const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+   
+  }, []);
+
+  const handleLoginUser = (typeOfUser: string) => {
+    navigate("/login", { state: { userType: typeOfUser } });
+  };
+
+  const handleLogout = () => {
+    console.log("Logging out...");
+    navigate("/");
+  };
+
+  const NavLinks = () => (
+    <>
+      <Link href="#home" underline="none" variant="plain" color="primary" level="body-lg"
+        sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}>
+        Home
+      </Link>
+      <Link href="#services" underline="none" variant="plain" color="primary" level="body-lg"
+        sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}>
+        Services
+      </Link>
+      <Link href="#about" underline="none" variant="plain" color="primary" level="body-lg"
+        sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}>
+        About
+      </Link>
+      <Link underline="none" variant="plain" color="primary" level="body-lg"
+        onClick={() => navigate("/book-opd-form")}
+        sx={{ "&:hover": { backgroundColor: "#6200ea", color: "white" } }}>
+        Book OPD
+      </Link>
+      <Link href="emergency-service-page" underline="none" variant="solid" color="danger" level="body-lg"
+        sx={{ "&:hover": { backgroundColor: "#d32f2f", color: "#eeeeee" } }}>
+        Emergency
+      </Link>
+      {authUser && userType === "super_admin" && (
+        <NavLink to="/admindashboard">Admin dashboard</NavLink>
+      )}
+    </>
+  );
+
   return (
     <>
-    
-    <div className="bg-zinc-900 p-3 flex items-center" >
-    {/* image */}
-    <div className='mx-2 rounded-lg' >
-            <img src="logo.png" alt="medisync logo" width={90} className='p-2 hover:cursor-pointer '/>
-    </div>
-    {/* input search */}
-    <div className='flex items-center gap-10' >
-    <Input 
-    placeholder="Search Hospitals"
-    variant="outlined"
-    color="neutral" 
-    sx={{
-        border: '1px solid grey', // Indigo-600 (Tailwind)
-        backgroundColor: '#1f2937', // Tailwind's bg-zinc-800
-        color: 'white',
-        borderRadius: '8px',
-        width:'20rem'
-      }}
-    />
-    </div >
+      {isCheckingAuth ? (
+        <div className="flex justify-center items-center h-screen">
+          <img src="loading.gif" alt="Loading..." width={100} />
+        </div>
+      ) : (
+        <div className="bg-zinc-900 p-3 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <img src="logo.png" alt="medisync logo" width={90} className="p-2 hover:cursor-pointer" />
+            {/* Search input (hidden on small) */}
+            <div className="hidden md:flex items-center gap-10">
+              <Input
+                placeholder="Search Hospitals"
+                variant="outlined"
+                color="neutral"
+                sx={{
+                  border: "1px solid grey",
+                  backgroundColor: "#1f2937",
+                  color: "white",
+                  borderRadius: "8px",
+                  width: "20rem",
+                }}
+              />
+            </div>
+          </div>
 
-    <div className='flex items-center justify-between w-full px-10' >
-    {/* navlinks */}
-    <div className='flex gap-10 w-full p-2 mx-10' >
-    <Link href="#home" underline="none" variant="plain" color='primary'  level="body-lg"
-    sx={{
-        '&:hover':{
-            backgroundColor:'#6200ea',
-            color:'white'
-        }
-    }}
-    >Home</Link>
-    <Link href="#services" underline="none" variant="plain" color='primary'  level="body-lg"
-    sx={{
-        '&:hover':{
-            backgroundColor:'#6200ea',
-            color:'white'
-        }
-    }}
-    >Services</Link>
-    <Link href="#about" underline="none" variant="plain" color='primary'  level="body-lg"
-    sx={{
-        '&:hover':{
-            backgroundColor:'#6200ea',
-            color:'white'
-        }
-    }}
-    >About</Link>
-    <Link href='book-opd-page' underline="none" variant="plain" color='primary'  level="body-lg"
-    sx={{
-        '&:hover':{
-            backgroundColor:'#6200ea',
-            color:'white'
-        }
-    }}
-    >Book OPD</Link>
-    <Link href="emergency-service-page"underline="none"  variant="solid" color='danger'  level="body-lg"
-    sx={{
-        '&:hover':{
-            backgroundColor:'#d32f2f',
-            color:'eeeeee'
-        }
-    }}
-    >Emergency</Link>
-    </div>
-    {/* login button  */}
-    <div>
-    <Dropdown>
-    <MenuButton 
-    variant="outlined"
-    color="primary"
-    >Login</MenuButton>
-    <Menu
-     placement="bottom-end" // 👈 aligns the dropdown to the right
-    >
-    <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("user")}} >User</MenuItem>
-    <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("doctor")}} >Doctor</MenuItem>
-    <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("inventory manager")}} >Inventory Manager</MenuItem>
-    <MenuItem sx={{borderBottom:"1px solid #424242"}} onClick={(e)=>{handleLoginUser("receptionist")}} >Reception</MenuItem>
-    <MenuItem sx={{borderBottom:"none"}} onClick={(e)=>{handleLoginUser("hospital admin")}} >Hospital Admin</MenuItem>
-    </Menu>
-    </Dropdown>
-    </div>
-    </div>
-    </div>
+          {/* Desktop Nav Links */}
+          <div className="hidden lg:flex gap-10 items-center">
+            <NavLinks />
+          </div>
 
-    <div>
-        <div></div>
-        <div></div>
-    </div>
+          {/* Right side (Login/Profile) */}
+          <div className="hidden lg:block px-5">
+            {authUser ? (
+              <Dropdown>
+                <MenuButton slots={{ root: IconButton }} slotProps={{ root: { variant: "plain", color: "primary" } }}>
+                  <Avatar alt="Profile" size="md" />
+                </MenuButton>
+                <Menu placement="bottom-end">
+                  <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
+                  <MenuItem onClick={() => navigate("/dashboard")}>Dashboard</MenuItem>
+                  <MenuItem onClick={handleLogout} sx={{ color: "red" }}>Logout</MenuItem>
+                </Menu>
+              </Dropdown>
+            ) : (
+              <Dropdown>
+                <MenuButton variant="outlined" color="primary">Login</MenuButton>
+                <Menu placement="bottom-end">
+                  <MenuItem onClick={() => handleLoginUser("user")}>User</MenuItem>
+                  <MenuItem onClick={() => handleLoginUser("doctor")}>Doctor</MenuItem>
+                  <MenuItem onClick={() => handleLoginUser("inventory manager")}>Inventory Manager</MenuItem>
+                  <MenuItem onClick={() => handleLoginUser("receptionist")}>Reception</MenuItem>
+                  <MenuItem onClick={() => handleLoginUser("hospital admin")}>Hospital Admin</MenuItem>
+                </Menu>
+              </Dropdown>
+            )}
+          </div>
+
+          {/* Mobile menu toggle */}
+          <div className="lg:hidden">
+            <IconButton variant="plain" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+            </IconButton>
+          </div>
+
+          {/* Mobile menu dropdown */}
+          {mobileMenuOpen && (
+            <Sheet
+              sx={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                bgcolor: "background.level1",
+                zIndex: 50,
+                p: 2,
+                display: "flex",
+                flexDirection: "column",
+                gap: 2
+              }}
+              className="lg:hidden"
+            >
+              <NavLinks />
+              {authUser ? (
+                <>
+                  <Link onClick={() => navigate("/profile")}>Profile</Link>
+                  <Link onClick={() => navigate("/dashboard")}>Dashboard</Link>
+                  <Link onClick={handleLogout} sx={{ color: "red" }}>Logout</Link>
+                </>
+              ) : (
+                <>
+                  <Link onClick={() => handleLoginUser("user")}>Login as User</Link>
+                  <Link onClick={() => handleLoginUser("doctor")}>Doctor</Link>
+                  <Link onClick={() => handleLoginUser("inventory manager")}>Inventory Manager</Link>
+                  <Link onClick={() => handleLoginUser("receptionist")}>Reception</Link>
+                  <Link onClick={() => handleLoginUser("hospital admin")}>Hospital Admin</Link>
+                </>
+              )}
+            </Sheet>
+          )}
+        </div>
+      )}
     </>
-  )
-}
+  );
+};
