@@ -21,7 +21,7 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  type: {
+  userType: {
     type: String,
     enum: ["doctor", "inventory_manager", "hospital_admin", "receptionist"],
     required: true,
