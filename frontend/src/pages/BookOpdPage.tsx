@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ReactNode } from "react";
 import { axiosInstance } from "../lib/axios";
 import CircularProgress from "@mui/joy/CircularProgress";
 import { useNavigate } from "react-router-dom";
@@ -9,14 +9,20 @@ interface Hospital {
 }
 
 interface Department {
+  dept_name: ReactNode;
   _id: string;
   name: string;
 }
 
+interface BookedSlot {
+  _id: string;
+  slot_time: string;
+}
 
 export const BookOpdPage = () => {
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [bookedSlots, setBookedSlots] = useState<BookedSlot[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -33,7 +39,6 @@ export const BookOpdPage = () => {
 
   useEffect(() => {
     fetchHospitals();
-
   }, []);
 
   const fetchHospitals = async () => {
@@ -48,14 +53,23 @@ export const BookOpdPage = () => {
   };
 
   const fetchDepartments = async (hospitalId: string) => {
-    console.log("aura")
     try {
       const res = await axiosInstance.get(`/hospital/departments/${hospitalId}`);
       setDepartments(res.data);
-      console.log("dj")
     } catch (error) {
       console.error("Error fetching departments:", error);
       setDepartments([]);
+    }
+  };
+
+  const fetchBookedSlots = async () => {
+    if (selectedDate && formData.hospitalId) {
+      try {
+        const res = await axiosInstance.get(`/hospital/booked-slots?hospitalId=${formData.hospitalId}&date=${selectedDate}`);
+        setBookedSlots(res.data);
+      } catch (error) {
+        console.error("Error fetching booked slots:", error);
+      }
     }
   };
 
@@ -65,13 +79,24 @@ export const BookOpdPage = () => {
       date: selectedDate,
       time: selectedTime,
     };
-    console.log(payload)
 
     try {
-      await axiosInstance.post("/opd-booking", payload);
-      alert("Booking successful!");
-    } catch (error) {
-      alert("Booking failed.");
+      const response = await axiosInstance.post("/hospital/opd-booking", payload);
+      alert(response.data.message);
+      if (response.status === 201) {
+        setSelectedTime("");
+        fetchBookedSlots();
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        alert("User not found. Please log in.");
+        navigate("/login");
+      } else if (error.response && error.response.status === 409) {
+        alert("This slot has already been booked. Please select another slot.");
+        fetchBookedSlots();
+      } else {
+        alert("Booking failed.");
+      }
     }
   };
 
@@ -86,16 +111,24 @@ export const BookOpdPage = () => {
     }
 
     setFormData({ ...formData, [name]: value });
+
+    if (name === "selectedDate") {
+      setSelectedDate(value);
+      fetchBookedSlots();
+    }
   };
 
-  // Time slots every 5 minutes from 10:00 AM to 3:00 PM
+  const isBooked = (time: string) => {
+    return bookedSlots.some((slot) => slot.slot_time === time);
+  };
+
   const timeSlots = Array.from({ length: 61 }, (_, i) => {
     const totalMinutes = 600 + i * 5;
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     const suffix = hours >= 12 ? "PM" : "AM";
     const displayHour = hours > 12 ? hours - 12 : hours;
-    return `${displayHour}:${minutes.toString().padStart(2, "0")}${suffix}`;
+    return `${displayHour}:${minutes.toString().padStart(2, "0")} ${suffix}`;
   });
 
   return (
@@ -105,11 +138,10 @@ export const BookOpdPage = () => {
           <CircularProgress />
         </div>
       ) : (
-        <div className="w-full min-h-screen bg-gray-900 text-white px-4 py-6 flex items-center  justify-start">
+        <div className="w-full min-h-screen bg-gray-900 text-white px-4 py-6 flex items-center justify-start">
           <div className="flex flex-col md:flex-row w-full max-w-6xl">
-            {/* Form Section - 65% */}
-            <div className="md:w-[to-70%] w-full backdrop-blur-lg bg-white/3 border border-gray-700 rounded-2xl shadow-lg p-6 sm:p-10">
-              <div className="">
+            <div className="md:w-[70%] w-full backdrop-blur-lg bg-white/3 border border-gray-700 rounded-2xl shadow-lg p-6 sm:p-10">
+              <div>
                 <button
                   className="float-left p-2 bg-gray-700 rounded hover:bg-gray-600 hover:cursor-pointer"
                   onClick={() => navigate("/")}
@@ -122,11 +154,8 @@ export const BookOpdPage = () => {
               </div>
 
               <div className="grid md:grid-cols-2 gap-10">
-                {/* Left Section */}
                 <div className="space-y-5">
-                  <h3 className="text-lg font-semibold text-blue-300">
-                    Patient Details
-                  </h3>
+                  <h3 className="text-lg font-semibold text-blue-300">Patient Details</h3>
                   <input
                     type="text"
                     name="name"
@@ -153,10 +182,7 @@ export const BookOpdPage = () => {
                   />
 
                   <div>
-                    <label className="block mb-1 text-sm text-gray-400">
-                      Select Hospital
-                    </label>
-
+                    <label className="block mb-1 text-sm text-gray-400">Select Hospital</label>
                     <select
                       name="hospitalId"
                       value={formData.hospitalId}
@@ -173,11 +199,8 @@ export const BookOpdPage = () => {
                   </div>
 
                   <div>
-                    <label className="block mb-1 text-sm text-gray-400">
-                      Select Department
-                    </label>
+                    <label className="block mb-1 text-sm text-gray-400">Select Department</label>
                     <select
-                      id=""
                       name="departmentId"
                       value={formData.departmentId}
                       onChange={handleChange}
@@ -187,70 +210,70 @@ export const BookOpdPage = () => {
                       <option value="">-- Select Department --</option>
                       {departments.map((dept) => (
                         <option key={dept._id} value={dept._id}>
-                          {dept.name}
+                          {dept.dept_name}
                         </option>
                       ))}
                     </select>
                   </div>
                 </div>
 
-                {/* Right Section */}
                 <div className="space-y-5">
-                  <h3 className="text-lg font-semibold text-blue-300">
-                    Appointment Date & Time
-                  </h3>
-                  <label className="hidden mb-1 text-sm text-gray-400">
-                    Select Appointment Date
-                  </label>
+                  <h3 className="text-lg font-semibold text-blue-300">Appointment Date & Time</h3>
                   <input
                     type="date"
+                    name="selectedDate"
                     value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
+                    onChange={(e) => {
+                      setSelectedDate(e.target.value);
+                      fetchBookedSlots();
+                    }}
                     title="Select Appointment Date"
                     className="w-full p-3 rounded-lg bg-[#2a2a2a] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
                   />
 
                   <div>
-                    <p className="text-sm text-gray-400 mb-2">
-                      Select Time Slot
-                    </p>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
-                      {timeSlots.map((time) => (
-                        <button
-                          key={time}
-                          onClick={() => setSelectedTime(time)}
-                          className={`p-2 rounded-lg text-sm border border-gray-600 transition ${
-                            selectedTime === time
-                              ? "bg-blue-700 text-white"
-                              : "bg-[#2a2a2a] hover:bg-[#3a3a3a]"
-                          }`}
-                        >
-                          {time}
-                        </button>
-                      ))}
+                    <p className="text-sm text-gray-400 mb-2">Select Time Slot</p>
+                    <div className="grid grid-cols-3 gap-2 max-h-[200px] overflow-y-auto">
+                      {timeSlots.map((slot) => {
+                        const booked = isBooked(slot);
+                        return (
+                          <button
+                            key={slot}
+                            disabled={booked}
+                            className={`px-3 py-2 rounded-lg text-sm font-semibold ${
+                              booked
+                                ? "bg-red-700 text-white cursor-not-allowed"
+                                : selectedTime === slot
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-700 text-white hover:bg-blue-500"
+                            }`}
+                            onClick={() => setSelectedTime(slot)}
+                          >
+                            {slot}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
+
+                  <button
+                    onClick={handleSubmit}
+                    disabled={
+                      !formData.name ||
+                      !formData.age ||
+                      !formData.gender ||
+                      !formData.hospitalId ||
+                      !formData.departmentId ||
+                      !selectedDate ||
+                      !selectedTime
+                    }
+                    className="w-full py-3 mt-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition disabled:opacity-50"
+                  >
+                    Confirm Appointment
+                  </button>
                 </div>
               </div>
-
-              {/* Submit Button */}
-              <div className="mt-10">
-                <button
-                  onClick={handleSubmit}
-                  className="w-full bg-blue-700 hover:bg-blue-800 p-3 rounded-lg font-semibold transition"
-                >
-                  BOOK APPOINTMENT
-                </button>
-              </div>
             </div>
-          </div>
-          {/* Image Section - 35% (Hidden on Mobile) */}
-          <div className="hidden md:flex md:w-[35%] items-center justify-center  px-4">
-            <img
-              src="doctorImageInOPDbooking.png" // Make sure the image exists in public folder or replace with full URL
-              alt="Doctor"
-              className="w-[350px] animate-floating drop-shadow-lg opacity-90"
-            />
           </div>
         </div>
       )}
