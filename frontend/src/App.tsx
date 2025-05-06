@@ -11,8 +11,6 @@ import { useEffect } from 'react'
 import HospitalAdminDashboard from './userDashboards/hospitalAdmin/hospitalAdmin/HospitalAdminDashboard'
 import DoctorDashboard from './userDashboards/hospitalAdmin/doctor/doctorDashboard'
 
-
-
 function App() {
   const {checkAuth} = useAuthStore();
   useEffect(()=>{
