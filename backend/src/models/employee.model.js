@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { SchemaTypes } from "mongoose";
 const employeeSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -30,6 +30,12 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  hospital_id:{
+    ref:"hospitals",
+    type:mongoose.Schema.Types.ObjectId,
+    require:true
+  }
+
 }, { timestamps: true });
 
 const Employee = mongoose.model("Employee", employeeSchema);

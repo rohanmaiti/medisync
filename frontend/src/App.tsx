@@ -1,5 +1,5 @@
 import './App.css'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import {LandingPage} from './pages/LandingPage'
 import { LoginPage } from './pages/LoginPage'
 import { SignupPage } from './pages/SIgnupPage'
@@ -9,7 +9,7 @@ import { Toaster } from 'react-hot-toast'
 import { useAuthStore } from './store/useAuthStore'
 import { useEffect } from 'react'
 import HospitalAdminDashboard from './userDashboards/hospitalAdmin/hospitalAdmin/HospitalAdminDashboard'
-import DoctorDashboard from './userDashboards/hospitalAdmin/doctor/doctorDashboard'
+import DoctorDashboard from './userDashboards/hospitalAdmin/doctor/DoctorDashboard'
 
 function App() {
   const {checkAuth} = useAuthStore();
@@ -24,9 +24,10 @@ function App() {
        <Route path="/login" element={<LoginPage/>}/> 
        <Route path="/signup" element={<SignupPage/>}/>  
 
-       <Route path="/registration-form" element={<HospitalRegistrationForm/>}/>   
+       <Route path="/registration-form" element={<HospitalRegistrationForm/>}/> 
        <Route path="/book-opd-form" element={<BookOpdPage/>}/>   
-       {/* <Route path="/hospitaladmin/dashboard" element={<HospitalAdminDashboard/>}/>    */}
+        
+       <Route path="/hospitaladmin/dashboard" element={<HospitalAdminDashboard/>}/>   
        <Route path="/doctor/dashboard" element={<DoctorDashboard/>}/>   
       </Routes>
       

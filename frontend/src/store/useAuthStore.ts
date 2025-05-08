@@ -82,22 +82,19 @@ export const useAuthStore = create<AuthStore>((set) => ({
       toast.success("Logged in successfully");
       // redicrect as per user type 
       // for user type "user" redirect to "/"
-      setTimeout(()=>{
       if(res.data.userType == "user")
       navigate("/");
       else if(res.data.userType == "doctor")
       navigate("/doctor/dashboard");
-      else if(res.data.userType == "inventory manager")
+      else if(res.data.userType == "inventory_manager")
       navigate("/inventory/dashboard");
       else if(res.data.userType == "receptionist")
       navigate("/receptionist/dashboard");
-      else if(res.data.userType == "hospital admin")  
+      else if(res.data.userType == "hospital_admin")  
       navigate("/hospitaladmin/dashboard");
       else if(res.data.userType == "super_admin")
       navigate("/superadmindashboard");
-      },1000);
-     
-      
+    
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Login failed");
     } finally {

@@ -115,9 +115,9 @@ export const Navbar = () => {
                 <Menu placement="bottom-end">
                   <MenuItem onClick={() => handleLoginUser("user")}>User</MenuItem>
                   <MenuItem onClick={() => handleLoginUser("doctor")}>Doctor</MenuItem>
-                  <MenuItem onClick={() => handleLoginUser("inventory manager")}>Inventory Manager</MenuItem>
+                  <MenuItem onClick={() => handleLoginUser("inventory_manager")}>Inventory Manager</MenuItem>
                   <MenuItem onClick={() => handleLoginUser("receptionist")}>Reception</MenuItem>
-                  <MenuItem onClick={() => handleLoginUser("hospital admin")}>Hospital Admin</MenuItem>
+                  <MenuItem onClick={() => handleLoginUser("hospital_admin")}>Hospital Admin</MenuItem>
                 </Menu>
               </Dropdown>
             )}

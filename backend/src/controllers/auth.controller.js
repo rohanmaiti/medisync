@@ -61,13 +61,19 @@ async function login(req, res) {
     }
     else{
       const employee = await Employee.findOne({ email: email });
-      if(!employee || await bcrypt.compare(password, employee.password)){
+      if(!employee){
+        return res.status(400).json({ message: "Invalid Credentials" });
+      } 
+      const passwordMatched = await bcrypt.compare(password, employee.password)
+      console.log("passwordMatched", passwordMatched);
+      if(!passwordMatched){
         return res.status(400).json({ message: "Invalid Credentials" });
       }
       generateToken(employee._id, res);
-      return res.status(200).json(employee);
+      return res.status(200).json(employee );
     }
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ message: "Server Error " + err.message });
   }
 }
@@ -164,6 +170,43 @@ function checkAuth(req, res) {
   }
 }
 
+async function EmployeeSignup(req,res){
+  console.log("signup route", req.body);
+  try {
+    const { name, email, password, userType, phone_number, address, hospital_id } = req.body;
+    if (!email || !password || !userType || !phone_number || !address || !hospital_id) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    const emp = await Employee.findOne({ email:email });
+    if (emp) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters long" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const newUser = new Employee({
+      name: name,
+      email: email,
+      password: hashedPassword,
+      phone_number: phone_number,
+      address: address,
+      userType: userType,
+      hospital_id: hospital_id
+    });
+    // generateToken(newUser._id, res);
+    await newUser.save();
+    return res.status(201).send(newUser);
+  } catch (error) {
+    console.log("Error in signup:", error);
+    res.status(500).send({ message: "Server Error " + error.message });
+  }
+}
+
 export {
   signup,
   login,
@@ -171,4 +214,5 @@ export {
   updateProfile,
   checkAuth,
   sendPasswordResetEmail,
+  EmployeeSignup
 };
