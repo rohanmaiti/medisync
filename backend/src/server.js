@@ -29,7 +29,6 @@ app.use(
   })
 );
 
-
 import hospitalRoutes from "./routes/hospital.route.js";
 import authRoutes from "./routes/auth.route.js";
 app.use("/api/hospital", hospitalRoutes);
