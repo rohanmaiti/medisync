@@ -34,7 +34,3 @@ import hospitalRoutes from "./routes/hospital.route.js";
 import authRoutes from "./routes/auth.route.js";
 app.use("/api/hospital", hospitalRoutes);
 app.use("/api/auth", authRoutes);
-
-app.get("/abc",(req,res)=>{
-  res.send("adfasfd");
-})
