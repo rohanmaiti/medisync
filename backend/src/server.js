@@ -17,6 +17,7 @@ app.listen(PORT, (err) => {
   })  
   err ? console.log(err) : console.log(`Server is running on port ${PORT}`);
 });
+
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());
