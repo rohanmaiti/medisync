@@ -146,3 +146,5 @@ export const useAuthStore = create<AuthStore>((set) => ({
     set({ hasParkingSlot: name });
   },
 }));
+
+
