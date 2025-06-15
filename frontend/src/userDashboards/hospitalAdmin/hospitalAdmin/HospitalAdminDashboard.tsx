@@ -23,4 +23,5 @@ const HospitalAdminDashboard: React.FC = () => {
 };
 
 
+
 export default HospitalAdminDashboard;
